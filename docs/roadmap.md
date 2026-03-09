@@ -5,15 +5,15 @@ This roadmap provides a list of activities necessary to achieve app functionalit
 **Goal: Enable Node.js backend to talk to the system's media processor.**
 
 ### Prerequisites:
-1. Install FFmpeg: Download it from ffmpeg.org. Ensure the bin folder is in the System PATH.
-2. Verify: Open the terminal and run ffmpeg -version.
+* [x] Install FFmpeg: Download it from ffmpeg.org. Ensure the bin folder is in the System PATH.
+* [x] Verify: Open the terminal and run ffmpeg -version.
 
 ### Implementation Steps
 1. Run npm install fluent-ffmpeg in your /backend folder.
 2. Create a utility file backend/utils/converter.js to handle the logic.
 
 ### Checklist
-* [ ] Install fluent-ffmpeg.
+* [x] Install fluent-ffmpeg.
 * [ ] Create a test script to convert a local video.
 * [ ] Log "Conversion Complete" to the console.
 

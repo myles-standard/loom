@@ -1,16 +1,24 @@
-import { useEffect, useState } from 'react'
-import './App.css'
+import { useEffect, useState } from 'react';
+import Banner from './components/Banner';
+import ConversionOptions from './components/ConversionOptions';
+import FileInfo from './components/FileInfo';
+import UploadFrom from './components/UploadForm';
 
 function App() {
-  const [message, setMessage] = useState("");
+  const [file, setFile] = useState<File | null>(null);
 
-  useEffect(() => {
-    fetch('/api/test')
-      .then(res => res.json())
-      .then(data => setMessage(data.message))
-  }, []);
-
-  return <h1>{message}</h1>;
+  return (
+    <div>
+      <Banner />
+      <UploadFrom setFile={setFile} />
+      {file && (
+        <>
+          <FileInfo file={file} />
+          <ConversionOptions file={file} />
+        </>
+      )}
+    </div>
+  )
 }
 
 export default App
