@@ -1,5 +1,6 @@
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import formatFileSize from './FormatFileSize';
 
 type Props = {
     setFile: (file: File | null) => void;
@@ -17,12 +18,14 @@ function UploadForm({ setFile }: Props) {
                     type="file"
                 />
             </Form.Group>
-            <Button
-                className="text-end"
-                type="submit"
-                variant="primary"
-            >
-                Upload
+
+            {/* File Info */}
+            {file && (
+                <div className="mb-3 small text-muted">
+                    <div><strong>File:</strong> {file.name}</div>
+                    <div><strong>Size:</strong> {formatFileSize(file.size)}</div>
+                </div>
+            )}
             </Button>
         </Form>
     )
