@@ -7,11 +7,11 @@ function Banner() {
     return (
         <Navbar expand="lg" bg="dark" variant="dark">
             <Container>
-                <Navbar.Brand href="#home">Media Magic</Navbar.Brand>
+                <Navbar.Brand href="/">Media Magic</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                        <Nav.Link href="#home">Home</Nav.Link>
+                        <Nav.Link href="/">Home</Nav.Link>
                         <Nav.Link href="#link">Link</Nav.Link>
                         <NavDropdown title="Options" id="basic-nav-dropdown">
                             <NavDropdown.Item href="#option1">Option 1</NavDropdown.Item>
