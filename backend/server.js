@@ -1,14 +1,66 @@
+import 'dotenv/config';
+
 import express from 'express';
+import session from 'express-session';
+import passport from 'passport';
 import cors from 'cors';
 import path from 'path';
 import multer from 'multer';
 
-const app = express();
-
-app.use(cors());
-app.use(express.json());
+import './auth.js';
 
 const PORT = 3000;
+const app = express();
+
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true
+}));
+app.use(express.json());
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get('/auth/google',
+    passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+app.get('/auth/google/callback',
+    passport.authenticate('google', {
+        failureRedirect: '/auth/google/failure',
+    }),
+    (req, res) => {
+        res.redirect('http://localhost:5173/dashboard');
+    }
+)
+
+app.get('/api/me', (req, res) => {
+    if (!req.isAuthenticated()) {
+        return res.status(401).json({ authenticated: false });
+    }
+
+    res.json({
+        authenticated: true,
+        user: req.user
+    });
+});
+
+app.post('/auth/logout', (req, res) => {
+    req.logout(err => {
+        if (err) {
+            return res.status(500).json({ error: 'Logout failed' });
+        }
+        
+        req.session.destroy(() => {
+            res.clearCookie('connect.sid');
+            res.json({ message: 'Logged out successfully' });
+        });
+    });
+});
 
 // Set up multer configuration for multipart/form-data handling
 const storage = multer.diskStorage({
