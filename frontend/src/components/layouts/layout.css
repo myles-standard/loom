@@ -1,6 +1,6 @@
 :root {
-    --text-grey: rgba(54, 54, 54, 0.8);
-    --subtle-grey: rgba(217, 221, 220, 0.5);
+  --text-grey: rgba(54, 54, 54, 0.8);
+  --subtle-grey: rgba(217, 221, 220, 0.5);
 }
 
 .app-layout {
@@ -15,12 +15,36 @@
 
   .nav {
     a {
-        color: var(--text-grey);
-        border-radius: 8px;
-        font-weight: 500;
-    }:hover {
-        background-color: var(--subtle-grey);
+      color: var(--text-grey);
+      border-radius: 8px;
+      font-weight: 500;
+      padding: 10px 14px;
     }
+    :hover {
+      background-color: var(--subtle-grey);
+    }
+  }
+}
+
+.topbar {
+  height: 60px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 20px;
+
+  .user-avatar {
+    width: 32px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  .user-display-name.truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 250px;
+    /* padding: 2px 5px; */
   }
 }
 
@@ -30,20 +54,6 @@
   flex-direction: column;
 }
 
-.topbar {
-  height: 60px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 0 20px;
-}
-
 .content {
   padding: 30px;
-}
-
-.avatar {
-  width: 32px;
-  border-radius: 50%;
-  margin-right: 10px;
 }
