@@ -1,23 +1,37 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import 'dotenv/config';
+import prisma from './components/Prisma.js';
 
+const callbackUrl = process.env.GOOGLE_CALLBACK_URL || 'http://localhost:3000/auth/google/callback';
 
 passport.use(new GoogleStrategy(
     {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: '/auth/google/callback'
+        callbackURL: callbackUrl,
+        passReqToCallback: false
     },
-    (accessToken, refreshToken, profile, done) => {
+    async (accessToken, refreshToken, profile, done) => {
         
-        const user = {
-            id: profile.id,
-            displayName: profile.displayName,
-            email: profile.emails?.[0]?.value,
-            avatar: profile.photos?.[0]?.value
-        };
+        try {
 
-        return done(null, user);
+            const user = await prisma.user.upsert({
+                where: { googleId: profile.id },
+                update: { displayName: profile.displayName },
+                create: {
+                    googleId: profile.id,
+                    displayName: profile.displayName,
+                    email: profile.emails?.[0]?.value || '',
+                    avatar: profile.photos?.[0]?.value.replace('s96-c', 's300-c')
+                }
+            });
+
+            return done(null, user);
+
+        } catch (error) {
+            return done(error, null);
+        }
     }
 ));
 

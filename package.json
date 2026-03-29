@@ -1,19 +1,27 @@
 {
+  "type": "module",
   "devDependencies": {
-    "eslint": "^10.0.3",
+    "@eslint/js": "^9.39.4",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^17.4.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
-    "prettier": "^3.8.1"
+    "prettier": "^3.8.1",
+    "typescript-eslint": "^8.57.0"
   },
   "scripts": {
-    "prepare": "husky"
+    "prepare": "husky",
+    "lint": "eslint .",
+    "format": "prettier . --write"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
+    "{frontend,backend}/src/**/*.{js,jsx,ts,tsx}": [
       "eslint --fix",
       "prettier --write"
     ],
-    "*.{css,scss,json,md}": [
+    "**/*.{css,scss,json,md}": [
       "prettier --write"
     ]
   }
