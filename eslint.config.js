@@ -23,7 +23,7 @@ export default [
             globals: { ...globals.browser },
             parserOptions: { ecmaFeatures: { jsx: true } }
         },
-        ruels: {
+        rules: {
             "react/react-in-jsx-scope": "off",
             "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
         },
