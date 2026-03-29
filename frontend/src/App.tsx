@@ -40,19 +40,22 @@ function App() {
   );
 }
 
-function DashboardRoute({ file, setFile }: { file: File | null; setFile: (f: File | null) => void }) {
-  
+function DashboardRoute({
+  file,
+  setFile,
+}: {
+  file: File | null;
+  setFile: (f: File | null) => void;
+}) {
   const { user, loading } = useContext(UserContext);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="loading">Loading</div>;
   }
 
   if (!user) {
     return <Navigate to="/" replace />;
   }
-
-  console.log(user);
 
   return (
     <>
@@ -68,4 +71,4 @@ function DashboardRoute({ file, setFile }: { file: File | null; setFile: (f: Fil
   );
 }
 
-export default App
+export default App;

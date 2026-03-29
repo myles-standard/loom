@@ -2,6 +2,7 @@
   --subtle-grey: rgba(217, 221, 220, 0.6);
 }
 
+/* Borders */
 .border.border-secondary-subtle,
 .border-top.border-secondary-subtle,
 .border-end.border-secondary-subtle,
@@ -10,6 +11,7 @@
   border-color: var(--subtle-grey) !important;
 }
 
+/* Loading state */
 .loading {
   font-size: 16px;
   font-weight: 500;
@@ -21,7 +23,7 @@
   vertical-align: bottom;
   -webkit-animation: ellipsis steps(4, end) 1000ms infinite;
   animation: ellipsis steps(4, end) 1000ms infinite;
-  content: "\2026";
+  content: '\2026';
   width: 0px;
 }
 
