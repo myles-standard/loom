@@ -13,7 +13,7 @@
   padding: 20px;
   background: #f8f9fa;
 
-  .nav {
+  .nav.children {
     a {
       color: var(--text-grey);
       border-radius: 8px;
@@ -44,7 +44,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
     width: 250px;
-    /* padding: 2px 5px; */
   }
 }
 
