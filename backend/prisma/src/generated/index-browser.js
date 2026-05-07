@@ -133,6 +133,7 @@ exports.Prisma.MediaScalarFieldEnum = {
   targetFormat: 'targetFormat',
   status: 'status',
   createdAt: 'createdAt',
+  size: 'size',
   userId: 'userId'
 };
 

@@ -28,9 +28,9 @@ model Media {
   targetFormat String?
   status       String   @default("uploaded")
   createdAt    DateTime @default(now())
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
+  size         Int
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
 
   @@index([userId])
 }

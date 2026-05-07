@@ -2066,8 +2066,18 @@ export namespace Prisma {
 
   export type AggregateMedia = {
     _count: MediaCountAggregateOutputType | null
+    _avg: MediaAvgAggregateOutputType | null
+    _sum: MediaSumAggregateOutputType | null
     _min: MediaMinAggregateOutputType | null
     _max: MediaMaxAggregateOutputType | null
+  }
+
+  export type MediaAvgAggregateOutputType = {
+    size: number | null
+  }
+
+  export type MediaSumAggregateOutputType = {
+    size: number | null
   }
 
   export type MediaMinAggregateOutputType = {
@@ -2078,6 +2088,7 @@ export namespace Prisma {
     targetFormat: string | null
     status: string | null
     createdAt: Date | null
+    size: number | null
     userId: string | null
   }
 
@@ -2089,6 +2100,7 @@ export namespace Prisma {
     targetFormat: string | null
     status: string | null
     createdAt: Date | null
+    size: number | null
     userId: string | null
   }
 
@@ -2100,10 +2112,19 @@ export namespace Prisma {
     targetFormat: number
     status: number
     createdAt: number
+    size: number
     userId: number
     _all: number
   }
 
+
+  export type MediaAvgAggregateInputType = {
+    size?: true
+  }
+
+  export type MediaSumAggregateInputType = {
+    size?: true
+  }
 
   export type MediaMinAggregateInputType = {
     id?: true
@@ -2113,6 +2134,7 @@ export namespace Prisma {
     targetFormat?: true
     status?: true
     createdAt?: true
+    size?: true
     userId?: true
   }
 
@@ -2124,6 +2146,7 @@ export namespace Prisma {
     targetFormat?: true
     status?: true
     createdAt?: true
+    size?: true
     userId?: true
   }
 
@@ -2135,6 +2158,7 @@ export namespace Prisma {
     targetFormat?: true
     status?: true
     createdAt?: true
+    size?: true
     userId?: true
     _all?: true
   }
@@ -2177,6 +2201,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: MediaAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MediaSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: MediaMinAggregateInputType
@@ -2207,6 +2243,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: MediaCountAggregateInputType | true
+    _avg?: MediaAvgAggregateInputType
+    _sum?: MediaSumAggregateInputType
     _min?: MediaMinAggregateInputType
     _max?: MediaMaxAggregateInputType
   }
@@ -2219,8 +2257,11 @@ export namespace Prisma {
     targetFormat: string | null
     status: string
     createdAt: Date
+    size: number
     userId: string
     _count: MediaCountAggregateOutputType | null
+    _avg: MediaAvgAggregateOutputType | null
+    _sum: MediaSumAggregateOutputType | null
     _min: MediaMinAggregateOutputType | null
     _max: MediaMaxAggregateOutputType | null
   }
@@ -2247,6 +2288,7 @@ export namespace Prisma {
     targetFormat?: boolean
     status?: boolean
     createdAt?: boolean
+    size?: boolean
     userId?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["media"]>
@@ -2259,6 +2301,7 @@ export namespace Prisma {
     targetFormat?: boolean
     status?: boolean
     createdAt?: boolean
+    size?: boolean
     userId?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["media"]>
@@ -2271,6 +2314,7 @@ export namespace Prisma {
     targetFormat?: boolean
     status?: boolean
     createdAt?: boolean
+    size?: boolean
     userId?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["media"]>
@@ -2283,10 +2327,11 @@ export namespace Prisma {
     targetFormat?: boolean
     status?: boolean
     createdAt?: boolean
+    size?: boolean
     userId?: boolean
   }
 
-  export type MediaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "filename" | "originalName" | "originalType" | "targetFormat" | "status" | "createdAt" | "userId", ExtArgs["result"]["media"]>
+  export type MediaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "filename" | "originalName" | "originalType" | "targetFormat" | "status" | "createdAt" | "size" | "userId", ExtArgs["result"]["media"]>
   export type MediaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -2310,6 +2355,7 @@ export namespace Prisma {
       targetFormat: string | null
       status: string
       createdAt: Date
+      size: number
       userId: string
     }, ExtArgs["result"]["media"]>
     composites: {}
@@ -2742,6 +2788,7 @@ export namespace Prisma {
     readonly targetFormat: FieldRef<"Media", 'String'>
     readonly status: FieldRef<"Media", 'String'>
     readonly createdAt: FieldRef<"Media", 'DateTime'>
+    readonly size: FieldRef<"Media", 'Int'>
     readonly userId: FieldRef<"Media", 'String'>
   }
     
@@ -3190,6 +3237,7 @@ export namespace Prisma {
     targetFormat: 'targetFormat',
     status: 'status',
     createdAt: 'createdAt',
+    size: 'size',
     userId: 'userId'
   };
 
@@ -3235,6 +3283,13 @@ export namespace Prisma {
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
     
   /**
    * Deep Input Types
@@ -3307,6 +3362,7 @@ export namespace Prisma {
     targetFormat?: StringNullableFilter<"Media"> | string | null
     status?: StringFilter<"Media"> | string
     createdAt?: DateTimeFilter<"Media"> | Date | string
+    size?: IntFilter<"Media"> | number
     userId?: StringFilter<"Media"> | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
@@ -3319,6 +3375,7 @@ export namespace Prisma {
     targetFormat?: SortOrderInput | SortOrder
     status?: SortOrder
     createdAt?: SortOrder
+    size?: SortOrder
     userId?: SortOrder
     user?: UserOrderByWithRelationInput
   }
@@ -3334,6 +3391,7 @@ export namespace Prisma {
     targetFormat?: StringNullableFilter<"Media"> | string | null
     status?: StringFilter<"Media"> | string
     createdAt?: DateTimeFilter<"Media"> | Date | string
+    size?: IntFilter<"Media"> | number
     userId?: StringFilter<"Media"> | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
@@ -3346,10 +3404,13 @@ export namespace Prisma {
     targetFormat?: SortOrderInput | SortOrder
     status?: SortOrder
     createdAt?: SortOrder
+    size?: SortOrder
     userId?: SortOrder
     _count?: MediaCountOrderByAggregateInput
+    _avg?: MediaAvgOrderByAggregateInput
     _max?: MediaMaxOrderByAggregateInput
     _min?: MediaMinOrderByAggregateInput
+    _sum?: MediaSumOrderByAggregateInput
   }
 
   export type MediaScalarWhereWithAggregatesInput = {
@@ -3363,6 +3424,7 @@ export namespace Prisma {
     targetFormat?: StringNullableWithAggregatesFilter<"Media"> | string | null
     status?: StringWithAggregatesFilter<"Media"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Media"> | Date | string
+    size?: IntWithAggregatesFilter<"Media"> | number
     userId?: StringWithAggregatesFilter<"Media"> | string
   }
 
@@ -3434,6 +3496,7 @@ export namespace Prisma {
     targetFormat?: string | null
     status?: string
     createdAt?: Date | string
+    size: number
     user: UserCreateNestedOneWithoutMediaInput
   }
 
@@ -3445,6 +3508,7 @@ export namespace Prisma {
     targetFormat?: string | null
     status?: string
     createdAt?: Date | string
+    size: number
     userId: string
   }
 
@@ -3456,6 +3520,7 @@ export namespace Prisma {
     targetFormat?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    size?: IntFieldUpdateOperationsInput | number
     user?: UserUpdateOneRequiredWithoutMediaNestedInput
   }
 
@@ -3467,6 +3532,7 @@ export namespace Prisma {
     targetFormat?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    size?: IntFieldUpdateOperationsInput | number
     userId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -3478,6 +3544,7 @@ export namespace Prisma {
     targetFormat?: string | null
     status?: string
     createdAt?: Date | string
+    size: number
     userId: string
   }
 
@@ -3489,6 +3556,7 @@ export namespace Prisma {
     targetFormat?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    size?: IntFieldUpdateOperationsInput | number
   }
 
   export type MediaUncheckedUpdateManyInput = {
@@ -3499,6 +3567,7 @@ export namespace Prisma {
     targetFormat?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    size?: IntFieldUpdateOperationsInput | number
     userId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -3592,6 +3661,17 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
@@ -3610,7 +3690,12 @@ export namespace Prisma {
     targetFormat?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
+    size?: SortOrder
     userId?: SortOrder
+  }
+
+  export type MediaAvgOrderByAggregateInput = {
+    size?: SortOrder
   }
 
   export type MediaMaxOrderByAggregateInput = {
@@ -3621,6 +3706,7 @@ export namespace Prisma {
     targetFormat?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
+    size?: SortOrder
     userId?: SortOrder
   }
 
@@ -3632,7 +3718,12 @@ export namespace Prisma {
     targetFormat?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
+    size?: SortOrder
     userId?: SortOrder
+  }
+
+  export type MediaSumOrderByAggregateInput = {
+    size?: SortOrder
   }
 
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -3664,6 +3755,22 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type MediaCreateNestedManyWithoutUserInput = {
@@ -3724,6 +3831,14 @@ export namespace Prisma {
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type UserUpdateOneRequiredWithoutMediaNestedInput = {
@@ -3843,6 +3958,33 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
   export type MediaCreateWithoutUserInput = {
     id?: string
     filename: string
@@ -3851,6 +3993,7 @@ export namespace Prisma {
     targetFormat?: string | null
     status?: string
     createdAt?: Date | string
+    size: number
   }
 
   export type MediaUncheckedCreateWithoutUserInput = {
@@ -3861,6 +4004,7 @@ export namespace Prisma {
     targetFormat?: string | null
     status?: string
     createdAt?: Date | string
+    size: number
   }
 
   export type MediaCreateOrConnectWithoutUserInput = {
@@ -3899,6 +4043,7 @@ export namespace Prisma {
     targetFormat?: StringNullableFilter<"Media"> | string | null
     status?: StringFilter<"Media"> | string
     createdAt?: DateTimeFilter<"Media"> | Date | string
+    size?: IntFilter<"Media"> | number
     userId?: StringFilter<"Media"> | string
   }
 
@@ -3958,6 +4103,7 @@ export namespace Prisma {
     targetFormat?: string | null
     status?: string
     createdAt?: Date | string
+    size: number
   }
 
   export type MediaUpdateWithoutUserInput = {
@@ -3968,6 +4114,7 @@ export namespace Prisma {
     targetFormat?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    size?: IntFieldUpdateOperationsInput | number
   }
 
   export type MediaUncheckedUpdateWithoutUserInput = {
@@ -3978,6 +4125,7 @@ export namespace Prisma {
     targetFormat?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    size?: IntFieldUpdateOperationsInput | number
   }
 
   export type MediaUncheckedUpdateManyWithoutUserInput = {
@@ -3988,6 +4136,7 @@ export namespace Prisma {
     targetFormat?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    size?: IntFieldUpdateOperationsInput | number
   }
 
 

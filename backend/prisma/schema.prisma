@@ -3,7 +3,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "./src/generated"
   previewFeatures = ["driverAdapters"]
 }
 
@@ -28,7 +27,7 @@ model Media {
   targetFormat  String?
   status        String    @default("uploaded")
   createdAt     DateTime  @default(now()) 
-  
+  size          Int
   userId        String
   user          User      @relation(fields: [userId], references: [id])
 
