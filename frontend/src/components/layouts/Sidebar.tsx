@@ -1,36 +1,66 @@
 import Nav from 'react-bootstrap/Nav';
 import { Link } from 'react-router-dom';
-import { ArrowsExpandVertical, ListColumnsReverse, Film } from 'react-bootstrap-icons';
+import { ArrowBarRight, ListColumnsReverse, Film, Joystick } from 'react-bootstrap-icons';
 import { ROUTES } from '../Routes';
+import { Collapse } from 'react-bootstrap';
 
-function Sidebar() {
-  return (
-    <div className="sidebar border-secondary-subtle">
-      <Nav className="flex-column parent">
-        <Nav.Link as={Link} to={ROUTES.dashboard}>
-          <span className="d-flex justify-content-between align-items-center text-nowrap">
-            Media Magic
-            <ArrowsExpandVertical />
-          </span>
-        </Nav.Link>
-      </Nav>
+type SidebarProps = {
+    open: boolean;
+    setOpen: (open: boolean) => void;
+};
 
-      <Nav className="flex-column children">
-        <Nav.Link as={Link} to={ROUTES.dashboard}>
-          <span className="d-flex justify-content-between align-items-center text-nowrap">
-            Dashboard
-            <ListColumnsReverse />
-          </span>
-        </Nav.Link>
-        <Nav.Link as={Link} to={ROUTES.mediaConverter}>
-          <span className="d-flex justify-content-between align-items-center text-nowrap">
-            Media Converter
-            <Film />
-          </span>
-        </Nav.Link>
-      </Nav>
-    </div>
-  );
+function Sidebar({ open, setOpen }: SidebarProps) {
+    return (
+        <div className="d-flex position-relative sidebar border-secondary-subtle">
+            <button onClick={() => setOpen(!open)} className="btn-collapse position-absolute">
+                <ArrowBarRight className={open ? 'rotated' : ''} />
+            </button>
+
+            <div className="sidebar-container d-flex flex-column">
+                <Nav.Link
+                    as={Link}
+                    to={ROUTES.dashboard}
+                    className="d-flex justify-content-between align-items-center"
+                >
+                    <Collapse in={open} dimension="width">
+                        <div className="text-nowrap">Media Magic</div>
+                    </Collapse>
+
+                    <div className="sidebar-icon-only d-flex justify-content-center align-items-center">
+                        <Joystick />
+                    </div>
+                </Nav.Link>
+
+                <Nav.Link
+                    as={Link}
+                    to={ROUTES.dashboard}
+                    className="d-flex justify-content-between align-items-center"
+                >
+                    <Collapse in={open} dimension="width">
+                        <div className="text-nowrap">Dashboard</div>
+                    </Collapse>
+
+                    <div className="sidebar-icon-only d-flex justify-content-center align-items-center">
+                        <ListColumnsReverse />
+                    </div>
+                </Nav.Link>
+
+                <Nav.Link
+                    as={Link}
+                    to={ROUTES.mediaConverter}
+                    className="d-flex justify-content-between align-items-center"
+                >
+                    <Collapse in={open} dimension="width">
+                        <div className="text-nowrap">Media Converter</div>
+                    </Collapse>
+
+                    <div className="sidebar-icon-only d-flex justify-content-center align-items-center">
+                        <Film />
+                    </div>
+                </Nav.Link>
+            </div>
+        </div>
+    );
 }
 
 export default Sidebar;

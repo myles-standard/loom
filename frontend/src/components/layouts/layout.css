@@ -1,58 +1,92 @@
 :root {
-  --text-grey: rgba(54, 54, 54, 0.8);
-  --subtle-grey: rgba(217, 221, 220, 0.5);
+    --text-grey: rgba(54, 54, 54, 0.8);
 }
 
 .app-layout {
-  display: flex;
-  height: 100vh;
+    height: 100vh;
 }
 
 .sidebar {
-  width: 240px;
-  padding: 20px;
-  background: #f8f9fa;
+    padding: 1.25rem;
+    background: var(--subtle-grey-3);
 
-  .nav.children {
-    a {
-      color: var(--text-grey);
-      border-radius: 8px;
-      font-weight: 500;
-      padding: 10px 14px;
+    button.btn-collapse {
+        left: 100%;
+        top: 10%;
+        padding: 0;
+        background-color: var(--subtle-grey-3);
+        border: none;
+        border-top-right-radius: 50%;
+        border-bottom-right-radius: 50%;
+
+        &:hover {
+            background-color: var(--subtle-grey-2);
+        }
+
+        svg {
+            margin: 0.625rem 0.625rem 0.625rem 0.313rem;
+            transition: transform 0.4s ease-in-out;
+        }
+
+        .rotated {
+            transform: rotate(180deg);
+        }
     }
-    :hover {
-      background-color: var(--subtle-grey);
+
+    .sidebar-content {
+        width: 15rem;
     }
-  }
+
+    a.nav-link {
+        color: var(--text-grey);
+        border-radius: 0.5rem;
+        font-weight: 500;
+        padding: 0.625rem 0.875rem;
+
+        &:hover {
+            background-color: var(--subtle-grey-2);
+        }
+
+        div {
+            min-height: 1.5rem;
+        }
+    }
 }
 
 .topbar {
-  height: 60px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 0 20px;
+    height: 3.75rem;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 1.25rem;
 
-  .user-avatar {
-    width: 32px;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
+    .user-avatar {
+        width: 2rem;
+        border-radius: 50%;
+        margin-right: 0.625rem;
+    }
 
-  .user-display-name.truncate {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 250px;
-  }
+    .user-display-name.truncate {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 15.625rem;
+    }
 }
 
 .main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .content {
-  padding: 30px;
+    padding: 1rem;
+
+    #dashboard {
+        .card {
+            max-width: 400px;
+            transition: all 0.3s ease-in-out;
+        }
+    }
 }

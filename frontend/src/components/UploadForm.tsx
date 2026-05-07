@@ -7,19 +7,22 @@ import { Check2Circle, XLg } from 'react-bootstrap-icons';
 import axios from 'axios';
 import formatFileSize from './FormatFileSize';
 
+import './UploadForm.css';
+
 type Props = {
     file: File | null;
     setFile: (file: File | null) => void;
-}
+    onUploadSuccess: () => void;
+};
 
-function UploadForm({ file, setFile }: Props) {
+function UploadForm({ file, setFile, onUploadSuccess }: Props) {
     const [uploading, setUploading] = useState(false);
-    const [message, setMessage] = useState("");
+    const [message, setMessage] = useState('');
     const [progress, setProgress] = useState(0);
 
     function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
         setFile(e.target.files?.[0] || null);
-        setMessage("");
+        setMessage('');
         setProgress(0);
     }
 
@@ -30,10 +33,9 @@ function UploadForm({ file, setFile }: Props) {
         setUploading(true);
 
         const formData = new FormData();
-        formData.append("file", file);
+        formData.append('file', file);
 
         try {
-
             await axios.post('/api/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -42,21 +44,21 @@ function UploadForm({ file, setFile }: Props) {
                     if (!event.total) return;
                     const percentCompleted = Math.round((event.loaded * 100) / event.total);
                     setProgress(percentCompleted);
-                }
+                },
             });
 
-            setMessage("Upload successful!");
-            setFile(null); // Clear the file input after successful upload
-
-        } catch (error: any) {
-            setMessage(error.response?.data?.error || 'An error occurred during upload');
+            setMessage('Upload successful!');
+            onUploadSuccess();
+        } catch (error) {
+            const err = axios.isAxiosError(error) ? error : undefined;
+            setMessage(err?.response?.data?.error || 'An error occurred during upload');
         } finally {
             setUploading(false);
         }
     };
 
     return (
-        <Form className="border rounded bg-light p-2" onSubmit={handleSubmit}>
+        <Form className="border rounded bg-light p-2 upload-form" onSubmit={handleSubmit}>
             <Form.Group controlId="file" className="mb-3">
                 <Form.Label>Select a media file:</Form.Label>
 
@@ -71,19 +73,17 @@ function UploadForm({ file, setFile }: Props) {
             {/* File Info */}
             {file && (
                 <div className="mb-3 small text-muted">
-                    <div><strong>File:</strong> {file.name}</div>
-                    <div><strong>Size:</strong> {formatFileSize(file.size)}</div>
+                    <div>
+                        <strong>File:</strong> {file.name}
+                    </div>
+                    <div>
+                        <strong>Size:</strong> {formatFileSize(file.size)}
+                    </div>
                 </div>
             )}
 
             {/* Upload Progress */}
-            {uploading && (
-                <ProgressBar
-                    now={progress}
-                    label={`${progress}%`}
-                    className="mb-3"
-                />
-            )}
+            {uploading && <ProgressBar now={progress} label={`${progress}%`} className="mb-3" />}
 
             <Button type="submit" disabled={!file || uploading}>
                 {uploading ? (
@@ -92,13 +92,13 @@ function UploadForm({ file, setFile }: Props) {
                         Uploading...
                     </>
                 ) : (
-                    "Upload"
+                    'Upload'
                 )}
             </Button>
 
             {message && (
                 <div className="mt-3">
-                    {message.includes("successful") ? (
+                    {message.includes('successful') ? (
                         <Check2Circle className="text-success me-2" />
                     ) : (
                         <XLg className="text-danger me-2" />

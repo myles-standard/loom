@@ -1,5 +1,7 @@
 :root {
-  --subtle-grey: rgba(217, 221, 220, 0.6);
+    --subtle-grey-1: rgba(217, 221, 220, 0.6);
+    --subtle-grey-2: rgba(217, 221, 220, 0.5);
+    --subtle-grey-3: rgba(217, 221, 220, 0.2);
 }
 
 /* Borders */
@@ -8,33 +10,37 @@
 .border-end.border-secondary-subtle,
 .border-bottom.border-secondary-subtle,
 .border-start.border-secondary-subtle {
-  border-color: var(--subtle-grey) !important;
+    border-color: var(--subtle-grey-1) !important;
 }
 
 /* Loading state */
 .loading {
-  font-size: 16px;
-  font-weight: 500;
+    font-size: 16px;
+    font-weight: 500;
 }
 
 .loading:after {
-  overflow: hidden;
-  display: inline-block;
-  vertical-align: bottom;
-  -webkit-animation: ellipsis steps(4, end) 1000ms infinite;
-  animation: ellipsis steps(4, end) 1000ms infinite;
-  content: '\2026';
-  width: 0px;
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: bottom;
+    -webkit-animation: ellipsis steps(4, end) 1000ms infinite;
+    animation: ellipsis steps(4, end) 1000ms infinite;
+    content: '\2026';
+    width: 0px;
 }
 
 @keyframes ellipsis {
-  to {
-    width: 1rem;
-  }
+    to {
+        width: 1rem;
+    }
 }
 
 @-webkit-keyframes ellipsis {
-  to {
-    width: 1rem;
-  }
+    to {
+        width: 1rem;
+    }
+}
+
+#conversion-options {
+    max-width: 300px;
 }

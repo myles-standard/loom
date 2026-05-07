@@ -1,26 +1,22 @@
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
+import { Outlet } from 'react-router-dom';
 import './layout.css';
+import { useState } from 'react';
 
-function Layout({ children }: { children: React.ReactNode }) {
+function Layout() {
+    const [sidebarOpen, setSidebarOpen] = useState(true);
+
     return (
-
-        <div className="app-layout">
-
-            <Sidebar />
-
+        <div className="app-layout d-flex">
+            <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
             <div className="main">
-
                 <Topbar />
-
                 <div className="content">
-                    {children}
+                    <Outlet context={{ sidebarOpen }} />
                 </div>
-
             </div>
-
         </div>
-
     );
 }
 

@@ -1,74 +1,49 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import ConversionOptions from './components/ConversionOptions';
-import FileInfo from './components/FileInfo';
-import FilePreview from './components/FilePreview';
 import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
 import Login from './components/auth/Login';
 import Dashboard from './components/Dashboard';
+import MediaConverter from './components/MediaConverter';
 import Layout from './components/layouts/Layout';
+import GuardRoute from './components/GuardRoute';
+import { ROUTES } from './components/Routes';
+import { API_URL } from '../src/config/api';
+import axios from 'axios';
 
-import { UserProvider, UserContext } from './contexts/UserContext';
-import { useContext } from 'react';
-import { Navigate } from 'react-router-dom';
+import { UserProvider } from './contexts/UserContext';
 
 import './App.css';
 import './index.css';
 
+axios.defaults.baseURL = API_URL;
+axios.defaults.withCredentials = true;
+
 function App() {
-  const [file, setFile] = useState<File | null>(null);
+    const [file, setFile] = useState<File | null>(null);
 
-  return (
-    <UserProvider>
-      <Router>
-        <Container className="">
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route
-              path="/dashboard"
-              element={
-                <Layout>
-                  <DashboardRoute file={file} setFile={setFile} />
-                </Layout>
-              }
-            />
-          </Routes>
-        </Container>
-      </Router>
-    </UserProvider>
-  );
-}
+    return (
+        <UserProvider>
+            <Router>
+                <Container className="">
+                    <Routes>
+                        {/* Public Routes */}
+                        <Route path={ROUTES.home} element={<Login />} />
 
-function DashboardRoute({
-  file,
-  setFile,
-}: {
-  file: File | null;
-  setFile: (f: File | null) => void;
-}) {
-  const { user, loading } = useContext(UserContext);
-
-  if (loading) {
-    return <div className="loading">Loading</div>;
-  }
-
-  if (!user) {
-    return <Navigate to="/" replace />;
-  }
-
-  return (
-    <>
-      <Dashboard file={file} setFile={setFile} />
-      {file && (
-        <Row className="mt-4">
-          <FilePreview file={file} />
-          <FileInfo file={file} />
-          <ConversionOptions file={file} />
-        </Row>
-      )}
-    </>
-  );
+                        {/* Protected Routes */}
+                        <Route element={<GuardRoute />}>
+                            <Route element={<Layout />}>
+                                <Route path={ROUTES.dashboard} element={<Dashboard />} />
+                                <Route
+                                    path={ROUTES.mediaConverter}
+                                    element={<MediaConverter file={file} setFile={setFile} />}
+                                />
+                            </Route>
+                        </Route>
+                    </Routes>
+                </Container>
+            </Router>
+        </UserProvider>
+    );
 }
 
 export default App;
