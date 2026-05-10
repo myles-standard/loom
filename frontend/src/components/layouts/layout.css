@@ -1,26 +1,23 @@
-:root {
-    --text-grey: rgba(54, 54, 54, 0.8);
-}
-
 .app-layout {
-    height: 100vh;
+    min-height: 100vh;
+    display: flex;
 }
 
 .sidebar {
-    padding: 1.25rem;
-    background: var(--subtle-grey-3);
+    padding: 3.75rem 1.25rem 1.25rem 1.25rem;
+    background: var(--trans-subtle-grey-3);
 
     button.btn-collapse {
         left: 100%;
-        top: 10%;
+        top: 5rem;
         padding: 0;
-        background-color: var(--subtle-grey-3);
+        background-color: var(--trans-subtle-grey-3);
         border: none;
         border-top-right-radius: 50%;
         border-bottom-right-radius: 50%;
 
         &:hover {
-            background-color: var(--subtle-grey-2);
+            background-color: var(--trans-subtle-grey-2);
         }
 
         svg {
@@ -38,13 +35,13 @@
     }
 
     a.nav-link {
-        color: var(--text-grey);
+        color: var(--font-grey-1);
         border-radius: 0.5rem;
         font-weight: 500;
         padding: 0.625rem 0.875rem;
 
         &:hover {
-            background-color: var(--subtle-grey-2);
+            background-color: var(--trans-subtle-grey-2);
         }
 
         div {
@@ -70,7 +67,20 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        width: 15.625rem;
+        width: 8rem;
+    }
+
+    #dropdownMenuButton {
+        .caret {
+            font-size: 0.75rem;
+        }
+    }
+
+    .dropdown-item {
+        &:hover,
+        &:active {
+            background-color: var(--trans-subtle-grey-1);
+        }
     }
 }
 
@@ -84,9 +94,12 @@
     padding: 1rem;
 
     #dashboard {
-        .card {
-            max-width: 400px;
-            transition: all 0.3s ease-in-out;
+        max-width: 1200px;
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 250px));
+            gap: 1rem;
         }
     }
 }

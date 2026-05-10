@@ -1,9 +1,8 @@
 import { useContext } from 'react';
 import { UserContext } from '../contexts/UserContext';
 import { useOutletContext } from 'react-router-dom';
-import MediaStats from './layouts/MediaStats';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import VideoStats from './layouts/VideoStats';
+import ContentLayout from './layouts/ContentLayout';
 
 function Dashboard() {
     const { user } = useContext(UserContext);
@@ -18,20 +17,13 @@ function Dashboard() {
     }
 
     return (
-        <div className="mt-5" id="dashboard">
-            <h2 className="mb-4">Dashboard</h2>
-            <Row className={`g-4 ${rowClasses}`}>
-                <Col>
-                    <MediaStats user={user} />
-                </Col>
-                <Col>
-                    <MediaStats user={user} />
-                </Col>
-                <Col>
-                    <MediaStats user={user} />
-                </Col>
-            </Row>
-        </div>
+        <ContentLayout self={['dashboard']}>
+            <div className="dashboard-grid">
+                <VideoStats user={user} />
+                <VideoStats user={user} />
+                <VideoStats user={user} />
+            </div>
+        </ContentLayout>
     );
 }
 

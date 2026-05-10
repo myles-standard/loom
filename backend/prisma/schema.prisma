@@ -16,10 +16,10 @@ model User {
   displayName String
   email       String @unique
   avatar      String
-  media       Media[]
+  video       Video[]
 }
 
-model Media {
+model Video {
   id            String    @id @default(uuid())
   filename      String
   originalName  String
@@ -28,6 +28,7 @@ model Media {
   status        String    @default("uploaded")
   createdAt     DateTime  @default(now()) 
   size          Int
+  metadata      Json?
   userId        String
   user          User      @relation(fields: [userId], references: [id])
 

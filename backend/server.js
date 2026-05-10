@@ -9,6 +9,7 @@ import multer from 'multer';
 import ffmpeg from 'fluent-ffmpeg';
 import fs from 'fs';
 import prisma from './components/Prisma.js';
+import mediaMetadata from './components/metadata.js';
 
 import './auth.js';
 
@@ -35,7 +36,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 async function checkStorageUsed(userId) {
-    const storage = await prisma.media.aggregate({
+    const storage = await prisma.video.aggregate({
         where: { userId: userId },
         _count: { id: true },
         _sum: { size: true },
@@ -169,17 +170,21 @@ app.post('/api/upload', upload.single('file'), policy(['file', 'auth']), async (
             return res.status(400).json({ error: error.message });
         }
 
+        const metadata = await mediaMetadata.videoMetadata(req.file);
+        const processedMetadata = mediaMetadata.processMetadata(metadata);
+
         // Wrap the DB call in a transaction-like method
-        const newMedia = await prisma.media.create({
+        const newMedia = await prisma.video.create({
             data: {
                 filename: req.file.filename,
                 originalName: req.file.originalname,
                 size: req.file.size,
                 userId: req.user.id,
+                metadata: processedMetadata.object,
             }
         });
 
-        res.json({message: 'Upload successful', mediaId: newMedia.id});
+        res.json({message: 'Upload successful', mediaId: newMedia.id, metadata: processedMetadata});
 
     } catch (error) {
         // If the database fails, manually "roll back" the file system by deleting the uploaded file
@@ -223,11 +228,28 @@ app.post('/api/convert', upload.single('file'), policy(['file']), (req, res) => 
         .save(outputPath);
 });
 
+app.get('/api/media/:id', policy(['auth']), async (req, res) => {
+    try {
+        const media = await prisma.video.findFirst({
+            where: {
+                id: req.params.id,
+                userId: req.user.id
+            }
+        });
+
+        if (!media) return res.status(404).json({ error: 'Media not found' });
+
+        res.json(media);
+    } catch (error) {
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 app.get('/api/user/stats', policy(['auth']), async (req, res) => {
 
     try {
         const storage = await checkStorageUsed(req.user.id);
-        const recentFiles = await prisma.media.findMany({
+        const recentFiles = await prisma.video.findMany({
             where: { userId: req.user.id },
             orderBy: { createdAt: 'desc' },
             take: 5,
@@ -246,7 +268,7 @@ app.get('/api/user/stats', policy(['auth']), async (req, res) => {
 
 // Every hour, clean up media files older than 24 hours
 setInterval(async () => {
-    const oldMedia = await prisma.media.findMany({
+    const oldMedia = await prisma.video.findMany({
         where: { createdAt: { lt: new Date(Date.now() - 24 * 60 * 60 * 1000) } }
     });
 
@@ -264,7 +286,7 @@ setInterval(async () => {
         }
     });
 
-    await prisma.media.deleteMany({ where: { id: { in: oldMedia.map(m => m.id) } } });
+    await prisma.video.deleteMany({ where: { id: { in: oldMedia.map(m => m.id) } } });
 }, 60 * 60 * 1000);
 
 app.listen(BACKEND_PORT, () => {

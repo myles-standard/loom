@@ -2,6 +2,7 @@ import Button from 'react-bootstrap/Button';
 import { UserContext } from '../../contexts/UserContext';
 import { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
+import { APP_NAME } from '../../config/constants';
 
 import './login.css';
 
@@ -22,7 +23,7 @@ export function Login() {
         <div className="row vh-100 d-flex align-items-center">
             <div className="position-relative">
                 <div className="text-center">
-                    <h1>Media Magic</h1>
+                    <h1>{APP_NAME}</h1>
                     <Button
                         onClick={handleLogin}
                         className="gsi-material-button"

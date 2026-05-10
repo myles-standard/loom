@@ -6,6 +6,7 @@ import ProgressBar from 'react-bootstrap/ProgressBar';
 import { Check2Circle, XLg } from 'react-bootstrap-icons';
 import axios from 'axios';
 import formatFileSize from './FormatFileSize';
+import type { Metadata } from '../types/Metadata';
 
 import './UploadForm.css';
 
@@ -13,9 +14,11 @@ type Props = {
     file: File | null;
     setFile: (file: File | null) => void;
     onUploadSuccess: () => void;
+    videoMetadata?: (metadata: Metadata) => void;
+    onFileId?: (id: string) => void;
 };
 
-function UploadForm({ file, setFile, onUploadSuccess }: Props) {
+function UploadForm({ file, setFile, onUploadSuccess, videoMetadata, onFileId }: Props) {
     const [uploading, setUploading] = useState(false);
     const [message, setMessage] = useState('');
     const [progress, setProgress] = useState(0);
@@ -36,7 +39,7 @@ function UploadForm({ file, setFile, onUploadSuccess }: Props) {
         formData.append('file', file);
 
         try {
-            await axios.post('/api/upload', formData, {
+            const response = await axios.post('/api/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -47,8 +50,16 @@ function UploadForm({ file, setFile, onUploadSuccess }: Props) {
                 },
             });
 
-            setMessage('Upload successful!');
+            setMessage(response.data.message || 'File uploaded!');
             onUploadSuccess();
+
+            if (response.data.mediaId) {
+                onFileId?.(response.data.mediaId);
+            }
+
+            if (response.data.metadata) {
+                videoMetadata?.(response.data.metadata);
+            }
         } catch (error) {
             const err = axios.isAxiosError(error) ? error : undefined;
             setMessage(err?.response?.data?.error || 'An error occurred during upload');

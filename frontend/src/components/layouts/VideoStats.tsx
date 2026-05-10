@@ -1,28 +1,23 @@
 import axios from 'axios';
-import { API_URL } from '../../config/api';
+import { API_URL } from '../../config/constants';
 import { useState, useEffect } from 'react';
 import Card from 'react-bootstrap/Card';
 import Spinner from 'react-bootstrap/Spinner';
 import formatFileSize from '../FormatFileSize';
-
-type User = {
-    id: string;
-    email: string;
-    displayName: string;
-};
+import type { User } from '../../contexts/UserContext';
 
 type Props = {
     user: User | null;
 };
 
-type MediaStats = {
+type VideoStats = {
     fileCount: number;
     totalSize: number;
     storageRemaining: number;
 };
 
-function MediaStats({ user }: Props) {
-    const [stats, setStats] = useState<MediaStats | null>(null);
+function VideoStats({ user }: Props) {
+    const [stats, setStats] = useState<VideoStats | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [message, setMessage] = useState<string>('');
 
@@ -46,7 +41,7 @@ function MediaStats({ user }: Props) {
     return (
         <Card className="border rounded bg-white">
             <Card.Body>
-                <Card.Title>Media</Card.Title>
+                <Card.Title>Videos</Card.Title>
 
                 {loading ? (
                     <Spinner animation="border" role="status" size="sm" />
@@ -54,15 +49,15 @@ function MediaStats({ user }: Props) {
                     <div className="text-start">
                         <label htmlFor="storage-info">Storage Information</label>
                         <div id="storage-info">
-                            <div>
+                            <div className="text-nowrap">
                                 <span>Total Files:</span>&nbsp;
                                 <strong>{stats.fileCount}</strong>
                             </div>
-                            <div>
+                            <div className="text-nowrap">
                                 <span>Storage Used:</span>&nbsp;
                                 <strong>{formatFileSize(stats.totalSize)}</strong>
                             </div>
-                            <div>
+                            <div className="text-nowrap">
                                 <span>Available:</span>&nbsp;
                                 <strong>{formatFileSize(stats.storageRemaining)}</strong>
                             </div>
@@ -76,4 +71,4 @@ function MediaStats({ user }: Props) {
     );
 }
 
-export default MediaStats;
+export default VideoStats;

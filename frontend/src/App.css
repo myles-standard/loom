@@ -1,7 +1,21 @@
 :root {
-    --subtle-grey-1: rgba(217, 221, 220, 0.6);
-    --subtle-grey-2: rgba(217, 221, 220, 0.5);
-    --subtle-grey-3: rgba(217, 221, 220, 0.2);
+    --trans-subtle-grey-1: rgba(217, 221, 220, 0.6);
+    --trans-subtle-grey-2: rgba(217, 221, 220, 0.5);
+    --trans-subtle-grey-3: rgba(217, 221, 220, 0.2);
+    --font-grey-1: rgba(54, 54, 54, 1);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--font-grey-1);
+}
+
+.font-subtle-grey-1 {
+    color: var(--font-grey-1) !important;
 }
 
 /* Borders */
@@ -10,7 +24,7 @@
 .border-end.border-secondary-subtle,
 .border-bottom.border-secondary-subtle,
 .border-start.border-secondary-subtle {
-    border-color: var(--subtle-grey-1) !important;
+    border-color: var(--trans-subtle-grey-1) !important;
 }
 
 /* Loading state */

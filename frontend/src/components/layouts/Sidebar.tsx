@@ -1,6 +1,6 @@
 import Nav from 'react-bootstrap/Nav';
 import { Link } from 'react-router-dom';
-import { ArrowBarRight, ListColumnsReverse, Film, Joystick } from 'react-bootstrap-icons';
+import { ArrowBarRight, ListColumnsReverse, Film } from 'react-bootstrap-icons';
 import { ROUTES } from '../Routes';
 import { Collapse } from 'react-bootstrap';
 
@@ -23,20 +23,6 @@ function Sidebar({ open, setOpen }: SidebarProps) {
                     className="d-flex justify-content-between align-items-center"
                 >
                     <Collapse in={open} dimension="width">
-                        <div className="text-nowrap">Media Magic</div>
-                    </Collapse>
-
-                    <div className="sidebar-icon-only d-flex justify-content-center align-items-center">
-                        <Joystick />
-                    </div>
-                </Nav.Link>
-
-                <Nav.Link
-                    as={Link}
-                    to={ROUTES.dashboard}
-                    className="d-flex justify-content-between align-items-center"
-                >
-                    <Collapse in={open} dimension="width">
                         <div className="text-nowrap">Dashboard</div>
                     </Collapse>
 
@@ -47,11 +33,11 @@ function Sidebar({ open, setOpen }: SidebarProps) {
 
                 <Nav.Link
                     as={Link}
-                    to={ROUTES.mediaConverter}
+                    to={ROUTES.videoConverter}
                     className="d-flex justify-content-between align-items-center"
                 >
                     <Collapse in={open} dimension="width">
-                        <div className="text-nowrap">Media Converter</div>
+                        <div className="text-nowrap">Video Converter</div>
                     </Collapse>
 
                     <div className="sidebar-icon-only d-flex justify-content-center align-items-center">
