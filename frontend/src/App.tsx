@@ -1,16 +1,17 @@
-import { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Container from 'react-bootstrap/Container';
-import Login from './components/auth/Login';
-import Dashboard from './components/Dashboard';
-import VideoConverter from './components/VideoConverter';
-import EditMedia from './components/EditMedia';
-import Layout from './components/layouts/Layout';
-import GuardRoute from './components/GuardRoute';
-import { ROUTES } from './components/Routes';
 import { API_URL } from './config/constants';
-import axios from 'axios';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { getRouteObject as routes } from './components/Routes';
 import { UserProvider } from './contexts/UserContext';
+import { useEffect, useState } from 'react';
+import { io } from 'socket.io-client';
+import axios from 'axios';
+import Container from 'react-bootstrap/Container';
+import Dashboard from './components/Dashboard';
+import EditMedia from './components/EditMedia';
+import GuardRoute from './components/GuardRoute';
+import Layout from './components/layouts/Layout';
+import Login from './components/auth/Login';
+import VideoConverter from './components/VideoConverter';
 
 import './App.css';
 import './index.css';
@@ -18,8 +19,32 @@ import './index.css';
 axios.defaults.baseURL = API_URL;
 axios.defaults.withCredentials = true;
 
+const socket = io(API_URL, {
+    withCredentials: true,
+});
+
 function App() {
     const [file, setFile] = useState<File | null>(null);
+    const [primaryTheme, setPrimaryTheme] = useState<string>('#FFFFFF');
+
+    useEffect(() => {
+        const handdleUpdates = (data: { value: string }) => {
+            console.log('Received colour update:', data.value);
+            setPrimaryTheme(data.value);
+        };
+
+        socket.on('colourUpdate', handdleUpdates);
+
+        return () => {
+            socket.off('colourUpdate', handdleUpdates);
+        };
+    }, []);
+
+    useEffect(() => {
+        console.log('Updating CSS variable to:', primaryTheme);
+        const root = document.documentElement;
+        root.style.setProperty('--primary-theme', primaryTheme);
+    }, [primaryTheme]);
 
     return (
         <UserProvider>
@@ -27,18 +52,18 @@ function App() {
                 <Container className="px-0" fluid>
                     <Routes>
                         {/* Public Routes */}
-                        <Route path={ROUTES.home} element={<Login />} />
+                        <Route path={routes('home').route} element={<Login />} />
 
                         {/* Protected Routes */}
                         <Route element={<GuardRoute />}>
                             <Route element={<Layout />}>
-                                <Route path={ROUTES.dashboard} element={<Dashboard />} />
+                                <Route path={routes('dashboard').route} element={<Dashboard />} />
                                 <Route
-                                    path={ROUTES.videoConverter}
+                                    path={routes('videoConverter').route}
                                     element={<VideoConverter file={file} setFile={setFile} />}
                                 />
                                 <Route
-                                    path={ROUTES.videoConverterEdit}
+                                    path={routes('videoConverterEdit').route}
                                     element={<EditMedia file={file}></EditMedia>}
                                 ></Route>
                             </Route>

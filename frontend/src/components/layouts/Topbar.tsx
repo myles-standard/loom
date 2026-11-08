@@ -6,7 +6,7 @@ import Logout from '../auth/Logout';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { CaretDownFill } from 'react-bootstrap-icons';
 import { Link } from 'react-router-dom';
-import { ROUTES } from '../Routes';
+import { getRouteObject as routes } from '../Routes';
 import Nav from 'react-bootstrap/Nav';
 import { APP_NAME } from '../../config/constants';
 
@@ -20,7 +20,7 @@ function Topbar() {
 
     if (loading) {
         return (
-            <div className="topbar border-bottom border-secondary-subtle d-flex justify-content-between align-items-center px-3 py-2">
+            <div className="topbar d-flex justify-content-between align-items-center px-3 py-2">
                 <div className="user-info">
                     <span className="user-display-name loading">Loading</span>
                 </div>
@@ -32,13 +32,13 @@ function Topbar() {
     }
 
     return (
-        <div className="topbar border-bottom border-secondary-subtle d-flex justify-content-between align-items-center px-3 py-2">
+        <div className="topbar d-flex justify-content-between align-items-center px-3 py-2">
             <Nav.Link
                 as={Link}
-                to={ROUTES.dashboard}
+                to={routes('dashboard').route}
                 className="d-flex justify-content-between align-items-center"
             >
-                <div className="text-nowrap fs-4 font-subtle-grey-1">{APP_NAME}</div>
+                <div className="text-nowrap fs-4 font-white-2">{APP_NAME}</div>
             </Nav.Link>
             <div className="user-info">
                 <Dropdown className="">
@@ -56,10 +56,9 @@ function Topbar() {
                                     referrerPolicy="no-referrer"
                                     onError={handleAvatarError}
                                 />
-                                <span className="user-display-name truncate m-1 d-none d-md-block text-dark">
+                                <span className="user-display-name truncate m-1 d-none d-md-block font-white-2">
                                     {user?.displayName || 'Guest'}
                                 </span>
-                                <CaretDownFill className="ms-1 text-secondary caret" />
                             </Dropdown.Toggle>
                             <Dropdown.Menu align="end">
                                 <Dropdown.Item>{user ? <Logout /> : <Login />}</Dropdown.Item>

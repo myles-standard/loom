@@ -44,10 +44,10 @@ function EditMedia({
     if (loading) return <p className="loading">Loading video</p>;
 
     return (
-        <ContentLayout self={['video', 'converter', 'edit']}>
+        <ContentLayout self="videoConverterEdit">
             {initialFile && (
-                <Row className="g-3 mt-0">
-                    <Col lg={7}>
+                <Row className="g-3 mt-0" id="edit-media-row">
+                    <Col lg={7} id="edit-media-text">
                         <Tabs defaultActiveKey="summary" id="edit-media-tabs" className="mb-3">
                             <Tab eventKey="summary" title="Summary">
                                 <FileInfo
@@ -65,7 +65,7 @@ function EditMedia({
                             </Tab>
                         </Tabs>
                     </Col>
-                    <Col lg={5}>
+                    <Col lg={5} id="edit-media-preview">
                         <FilePreview file={initialFile} />
                     </Col>
                 </Row>

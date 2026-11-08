@@ -46,8 +46,10 @@ function ConversionOptions({ file }: Props) {
     };
 
     return (
-        <div className="p-3 border rounded bg-white mt-3" id="conversion-options">
-            <h5>Conversion Options</h5>
+        <div
+            className="p-3 border rounded primary-theme bg-transparent mt-3"
+            id="conversion-options"
+        >
             <Form.Group>
                 <Form.Label for="conversion-format">Convert to:</Form.Label>
                 <Form.Select

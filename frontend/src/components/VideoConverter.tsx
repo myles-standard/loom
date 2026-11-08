@@ -21,7 +21,7 @@ function VideoConverter({ file, setFile }: Props) {
     if (isUploaded && fileId) return <Navigate to={`${fileId}`} relative="path" />;
 
     return (
-        <ContentLayout self={['video', 'converter']}>
+        <ContentLayout self="videoConverter">
             <UploadForm
                 file={file}
                 setFile={setFile}

@@ -17,11 +17,60 @@ function FileInfo({ file, metadata }: Props) {
         return (numericBitRate / 1000).toFixed(2) + ' Mbps';
     }
 
+    const isValid = (str: string) => {
+        return !(
+            str.includes('unknown') ||
+            str.includes('unknown') ||
+            String(str.toLowerCase).includes('n/a')
+        );
+    };
+
     const displayInfo = useMemo(() => {
         if (!metadata) return null;
 
-        const vStr = `${metadata.object.video.codec}, ${metadata.object.video.frameRate}, ${convertToMbps(metadata.object.format.bitRate)}`;
-        const aStr = `${metadata.object.audio.codec}, ${metadata.object.audio.channels} channels (${metadata.object.audio.channelLayout}), ${metadata.object.audio.sampleRate} Hz`;
+        console.log(metadata.object.video.frameRate, typeof metadata.object.video.frameRate);
+
+        const vCodec = {
+            value: metadata.object.video.codec,
+            isValid() {
+                return isValid(String(this.value));
+            },
+        };
+        const vFrameRate = {
+            value: metadata.object.video.frameRate,
+            isValid() {
+                return isValid(String(this.value));
+            },
+        };
+        const aCodec = {
+            value: metadata.object.audio.codec,
+            isValid() {
+                return isValid(String(this.value));
+            },
+        };
+        const aChannels = {
+            value: metadata.object.audio.channels,
+            isValid() {
+                return isValid(String(this.value));
+            },
+        };
+        const aChannelLayout = {
+            value: metadata.object.audio.channelLayout,
+            isValid() {
+                return isValid(String(this.value));
+            },
+        };
+        const aSampleRate = {
+            value: metadata.object.audio.sampleRate + ' Hz',
+            isValid() {
+                return isValid(String(this.value));
+            },
+        };
+
+        console.log(aCodec, aCodec.isValid, aCodec.value);
+
+        const vStr = `${vCodec.isValid() ? vCodec.value : ''}, ${vFrameRate.isValid() ? vFrameRate.value : ''}, ${convertToMbps(metadata.object.format.bitRate)}`;
+        const aStr = `${aCodec.isValid() ? aCodec.value : ''}, ${aChannels.isValid() ? aChannels.value : ''} channels (${aChannelLayout.isValid() ? aChannelLayout.value : ''}), ${aSampleRate.isValid() ? aSampleRate.value : ''}`;
         const longest = Math.max(vStr.length, aStr.length);
 
         return { vStr, aStr, longest };
@@ -34,24 +83,24 @@ function FileInfo({ file, metadata }: Props) {
         : {};
 
     return (
-        <div>
+        <div className="file-info" id="file-info">
             <h3>File Details</h3>
             <p>
-                <b>Name:</b> {file.name}
+                <span className="file-info-label">Name:</span> {file.name}
             </p>
             <p>
-                <b>Size:</b> {formatFileSize(file.size)}
+                <span className="file-info-label">Size:</span> {formatFileSize(file.size)}
             </p>
             <p>
-                <b>Type:</b> {file.type}
+                <span className="file-info-label">Type:</span> {file.type}
             </p>
             <p>
-                <b>Last Modified:</b>{' '}
+                <span className="file-info-label">Last Modified:</span>{' '}
                 {file.lastModified ? new Date(file.lastModified).toLocaleString() : 'Unknown'}
             </p>
 
             {metadata && displayInfo && (
-                <Card className="border rounded bg-white">
+                <Card className="border bg-transparent primary-theme">
                     <Card.Body>
                         <div>
                             <Row>
@@ -80,12 +129,6 @@ function FileInfo({ file, metadata }: Props) {
                         </div>
                     </Card.Body>
                 </Card>
-                // <div>
-                //     <h5>Metadata</h5>
-                //     <pre style={{ fontSize: '0.8em', backgroundColor: '#f8f9fa', padding: '10px', borderRadius: '4px' }}>
-                //         {JSON.stringify(metadata, null, 2)}
-                //     </pre>
-                // </div>
             )}
         </div>
     );

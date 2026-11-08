@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { API_URL } from '../../config/constants';
 import { useState, useEffect } from 'react';
-import Card from 'react-bootstrap/Card';
 import Spinner from 'react-bootstrap/Spinner';
 import formatFileSize from '../FormatFileSize';
 import type { User } from '../../contexts/UserContext';
+import Card from './Card';
 
 type Props = {
     user: User | null;
@@ -39,7 +39,7 @@ function VideoStats({ user }: Props) {
     }, [user]);
 
     return (
-        <Card className="border rounded bg-white">
+        <Card className="rounded bg-transparent primary-theme">
             <Card.Body>
                 <Card.Title>Videos</Card.Title>
 

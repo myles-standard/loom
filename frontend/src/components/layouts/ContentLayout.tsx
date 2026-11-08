@@ -2,63 +2,60 @@ import type { ReactNode } from 'react';
 import { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { APP_NAME } from '../../config/constants';
+import { getRouteObject } from '../Routes';
+import type { RouteKey } from '../Routes';
 
 type Breadcrumbs = {
     label: string;
     path: string;
 };
 
-function ContentLayout({ children, self }: { children: ReactNode; self: string[] }) {
-    const [title, setTitle] = useState('');
-    const [id, setId] = useState('');
+function ContentLayout({ children, self }: { children: ReactNode; self: RouteKey }) {
     const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumbs[]>([]);
     const location = useLocation();
-
-    const handleTitle = (words: string[]) =>
-        words.map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-    const handleId = (words: string[]) => words.map((w) => w.toLowerCase()).join('-');
+    const routeObj = getRouteObject(self);
 
     const handleBreadcrumbs = (location: string) => {
         let pages = location.split('/').filter(Boolean);
-
         pages = pages.slice(0, pages.length - 1);
 
-        return pages.map((page, index) => {
-            const labelParts = page.split('-');
-            const formattedLabel = handleTitle(labelParts);
-
+        return pages.map((_, index) => {
             return {
-                label: formattedLabel,
+                label: routeObj.label,
                 path: '/' + pages.slice(0, index + 1).join('/'),
             };
         });
     };
 
     useEffect(() => {
-        setId(handleId(self));
         setBreadcrumbs(handleBreadcrumbs(location.pathname));
-
-        const calculatedTitle = handleTitle(self);
-        setTitle(calculatedTitle);
-
-        document.title = `${APP_NAME} - ${calculatedTitle}`;
+        document.title = `${APP_NAME} - ${routeObj.label}`;
 
         return () => {
             document.title = APP_NAME;
         };
-    }, [self]);
+    }, [self, location.pathname, routeObj.label]);
 
     return (
         <>
-            <span className="breadcrumbs" id="breadcrumbs">
-                {breadcrumbs.map((crumb, index) => (
-                    <Link key={crumb.path} to={crumb.path}>
-                        {crumb.label} {index < breadcrumbs.length - 1 && ' / '}
-                    </Link>
-                ))}
-            </span>
-            <div className="mt-3" id={id}>
-                <h2 className="mb-4">{title}</h2>
+            <div className="content-layout-body" id={routeObj.id}>
+                <div className="d-flex mb-4 align-items-end gap-3">
+                    <h2 className="content-layout-label mb-0">{routeObj.label}</h2>
+                    <span className="breadcrumbs" id="breadcrumbs">
+                        {breadcrumbs.map((crumb, index) => (
+                            <>
+                                <Link
+                                    key={crumb.path}
+                                    to={crumb.path}
+                                    className="text-decoration-none"
+                                >
+                                    {crumb.label}
+                                </Link>
+                                {index < breadcrumbs.length - 1 && ' / '}
+                            </>
+                        ))}
+                    </span>
+                </div>
                 {children}
             </div>
         </>

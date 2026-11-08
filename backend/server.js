@@ -1,26 +1,60 @@
 import 'dotenv/config';
 
-import express from 'express';
-import session from 'express-session';
-import passport from 'passport';
 import cors from 'cors';
-import path from 'path';
-import multer from 'multer';
+import express from 'express';
 import ffmpeg from 'fluent-ffmpeg';
 import fs from 'fs';
-import prisma from './components/Prisma.js';
+import http from 'http';
 import mediaMetadata from './components/metadata.js';
+import multer from 'multer';
+import passport from 'passport';
+import path from 'path';
+import prisma from './components/Prisma.js';
+import session from 'express-session';
+import { Server } from 'socket.io';
 
 import './auth.js';
 
-const SERVER_URL = process.env.SERVER_URL;
 const BACKEND_PORT = process.env.BACKEND_PORT;
 const FRONTEND_PORT = process.env.FRONTEND_PORT;
-const SERVER_BACKEND = `${SERVER_URL}:${BACKEND_PORT}`;
-const SERVER_FRONTEND = `${SERVER_URL}:${FRONTEND_PORT}`;
+const SERVER_BACKEND = `${process.env.PROTOCOL || 'http'}://${process.env.HOST || 'localhost'}${BACKEND_PORT && isFinite(BACKEND_PORT) ? `:${parseInt(BACKEND_PORT, 10)}` : ''}`;
+const SERVER_FRONTEND = `${process.env.PROTOCOL || 'http'}://${process.env.HOST || 'localhost'}:${FRONTEND_PORT && isFinite(FRONTEND_PORT) ? parseInt(FRONTEND_PORT, 10) : ''}`;
 const MAX_STORAGE_PER_USER = parseInt(process.env.MAX_STORAGE_PER_USER, 10) || 100 * 1024 * 1024;
 
 const app = express();
+const server = http.createServer(app);
+
+const io = new Server(server, {
+    cors: {
+        origin: SERVER_FRONTEND,
+        credentials: true
+    }
+});
+
+const colours = [
+    '#FF5733', '#3357FF', '#F333FF', '#FF33A1', '#FFA133'
+];
+
+let currentPrimaryTheme = colours[Math.floor(Math.random() * colours.length)];
+setInterval(() => {
+    currentPrimaryTheme = colours[Math.floor(Math.random() * colours.length)];
+
+    io.emit('colourUpdate', {
+        value: currentPrimaryTheme,
+    });
+}, 60 * 60 * 1000);
+
+io.on('connection', (socket) => {
+    console.log('A user connected:', socket.id);
+
+    socket.emit('colourUpdate', {
+        value: currentPrimaryTheme,
+    });
+
+    socket.on('disconnect', () => {
+        console.log('A user disconnected:', socket.id);
+    });
+});
 
 app.use(cors({
     origin: SERVER_FRONTEND,
@@ -49,7 +83,7 @@ async function checkStorageUsed(userId) {
  * @param {string} userId - The unique identifier of the user.
  * @param {number} newFileSize  - The size of the new file being uploaded.
  * @returns {Promise<void>} - Resolves if the user is within the storage limit, otherwise rejects with an error.
- * @returns 
+ * @returns
  */
 async function checkStorageLimit(userId, newFileSize) {
     const storage = await checkStorageUsed(userId);
@@ -127,7 +161,7 @@ app.post('/auth/logout', (req, res) => {
         if (err) {
             return res.status(500).json({ error: 'Logout failed' });
         }
-        
+
         req.session.destroy(() => {
             res.clearCookie('connect.sid');
             res.json({ message: 'Logged out successfully' });
@@ -209,7 +243,7 @@ app.post('/api/convert', upload.single('file'), policy(['file']), (req, res) => 
             fs.promises.unlink(outputPath)
         ])
     }
-    
+
     ffmpeg(inputPath)
         .toFormat(targetFormat)
         .on('end', () => {
@@ -268,6 +302,7 @@ app.get('/api/user/stats', policy(['auth']), async (req, res) => {
 
 // Every hour, clean up media files older than 24 hours
 setInterval(async () => {
+    console.log(SERVER_BACKEND, SERVER_FRONTEND);
     const oldMedia = await prisma.video.findMany({
         where: { createdAt: { lt: new Date(Date.now() - 24 * 60 * 60 * 1000) } }
     });
@@ -289,6 +324,6 @@ setInterval(async () => {
     await prisma.video.deleteMany({ where: { id: { in: oldMedia.map(m => m.id) } } });
 }, 60 * 60 * 1000);
 
-app.listen(BACKEND_PORT, () => {
+server.listen(BACKEND_PORT, () => {
     console.log(`Server is running on ${SERVER_BACKEND}`);
 });

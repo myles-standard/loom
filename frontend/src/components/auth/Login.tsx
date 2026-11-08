@@ -20,8 +20,8 @@ export function Login() {
     };
 
     return (
-        <div className="row vh-100 d-flex align-items-center">
-            <div className="position-relative">
+        <div className="row login d-flex align-items-center">
+            <div className="position-relative p-0">
                 <div className="text-center">
                     <h1>{APP_NAME}</h1>
                     <Button

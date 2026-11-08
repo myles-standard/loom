@@ -16,7 +16,7 @@ export function Logout() {
     };
 
     return (
-        <div onClick={handleLogout} className=" text-decoration-none text-secondary">
+        <div onClick={handleLogout} className=" text-decoration-none">
             Log out
         </div>
     );
